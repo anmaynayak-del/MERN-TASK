@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRUD Operations - Item Manager</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Product Management</h2>
+
+    <!-- Form matching wireframe -->
+    <div class="form-card">
+      <form id="itemForm">
+        <input type="hidden" id="itemId">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" placeholder="Enter name" required>
+        </div>
+        <div class="form-group">
+          <label for="price">Price</label>
+          <input type="number" id="price" placeholder="Enter price" step="0.01" required>
+        </div>
+        <div class="btn-group">
+          <button type="submit" id="submitBtn">Submit</button>
+          <button type="button" id="cancelBtn" class="cancel-btn" style="display: none;">Cancel</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Table matching wireframe -->
+    <table class="item-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="itemsTableBody">
+        <!-- Rows rendered dynamically via script.js -->
+      </tbody>
+    </table>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
