@@ -1,0 +1,50 @@
+.notfound-card-clean {
+  align-items: center;
+  text-align: center;
+}
+
+.notfound-pill {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--teal-primary);
+  background-color: var(--teal-light);
+  padding: 4px 12px;
+  border-radius: 9999px;
+  margin-bottom: 12px;
+}
+
+.notfound-code-clean {
+  font-size: 72px;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: var(--teal-primary);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.notfound-title-clean {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 12px;
+}
+
+.notfound-desc-clean {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+  margin-bottom: 28px;
+}
+
+.path-chip {
+  background-color: #f1f6f4;
+  color: var(--teal-primary);
+  padding: 2px 7px;
+  border-radius: 5px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid #dce7e3;
+}

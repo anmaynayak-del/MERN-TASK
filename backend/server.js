@@ -4,7 +4,14 @@ const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const path = require("path");
 const fs = require("fs");
-require("dotenv").config();
+const dns = require("dns");
+try {
+  dns.setServers(["8.8.8.8", "8.8.4.4"]);
+} catch (e) {
+  // ignore if not supported
+}
+require("dotenv").config({ path: path.join(__dirname, ".env") });
+require("dotenv").config(); // fallback to root .env if present
 
 const User = require("./models/User");
 
@@ -20,19 +27,36 @@ app.use(express.json());
 // In-memory fallback if MongoDB local daemon isn't running
 let inMemoryUsers = [];
 
+// Mask sensitive credentials in MongoDB URI for logging
+function sanitizeUri(uri) {
+  if (!uri) return "";
+  return uri.replace(/(mongodb(?:\+srv)?:\/\/[^:]+:)([^@]+)(@)/, "$1****$3");
+}
+
 // Connect to MongoDB
 async function connectDB() {
+  const sanitized = sanitizeUri(MONGO_URI);
   try {
     await mongoose.connect(MONGO_URI, {
-      serverSelectionTimeoutMS: 2500,
+      serverSelectionTimeoutMS: 15000,
     });
-    console.log("Connected to MongoDB successfully at:", MONGO_URI);
+    console.log("Connected to MongoDB successfully at:", sanitized);
   } catch (err) {
     console.warn(
-      `MongoDB connection to "${MONGO_URI}" not active (${err.message}). Using fallback persistence until MongoDB service starts.`
+      `MongoDB connection to "${sanitized}" not active (${err.message}). Using fallback persistence until MongoDB service starts.`
     );
   }
 }
+
+mongoose.connection.on("connected", () => {
+  console.log("Mongoose connected to MongoDB database.");
+});
+mongoose.connection.on("error", (err) => {
+  console.error("Mongoose connection error:", err.message);
+});
+mongoose.connection.on("disconnected", () => {
+  console.warn("Mongoose disconnected.");
+});
 
 connectDB();
 
@@ -156,6 +180,15 @@ app.get("/api/users", async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+});
+
+// Explicit 404 for Login Route
+app.all("/api/login", (req, res) => {
+  res.status(404).json({
+    status: 404,
+    error: "Not Found",
+    message: "The login route is currently unavailable. Please use the registration pipeline at /api/signup.",
+  });
 });
 
 // Serve Frontend built files if present
